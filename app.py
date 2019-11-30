@@ -13,14 +13,19 @@ async def on_message(message):
     if message.content.lower() == 'hi':
         msg = 'Hey !'
         await message.channel.send(msg)
+        return
+
+    if message.content.startswith('!google'):
+        search_results = find_google_results(message.content.replace('!google ',''))
+        await message.channel.send(search_results)
+        return
 
 @client.event
 async def on_ready():
-    print('Logged in as')
-    print(client.user.name)
-    print(client.user.id)
-    print('------')
+    print(f'Connected to discord : BOT NAME : {client.user.name} - {client.user.id} \nBot is listening :')
 
 if __name__ == '__main__':
-    TOKEN = os.environ.get('discodrapp_TOKEN')
+    print('Fetching Discord Bot Token')
+    TOKEN = os.environ.get('discordapp_TOKEN')
+    print('Conncting ...')
     client.run(TOKEN)
