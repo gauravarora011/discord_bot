@@ -1,11 +1,12 @@
 import discord
 import os
+from search_results import find_google_results
 
 client = discord.Client()
 
 @client.event
 async def on_message(message):
-    print(str(message.content) + ' -> ' + str(message.author.id))
+    print(f'{message.content} -> {message.author.id}|{message.author.name}')
     # we do not want the bot to reply to itself
     if message.author == client.user:
         return
@@ -16,9 +17,13 @@ async def on_message(message):
         return
 
     if message.content.startswith('!google'):
-        search_results = find_google_results(message.content.replace('!google ',''))
-        await message.channel.send(search_results)
-        return
+        try:
+            print(f'Finding Seach Results for {message.content}'    )
+            search_results = find_google_results(message.content.replace('!google ',''))
+            await message.channel.send(search_results)
+            return
+        except:
+            await message.channel.send("Failed to fetch search results, contact admin!")
 
 @client.event
 async def on_ready():
