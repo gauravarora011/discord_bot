@@ -1,25 +1,32 @@
 import discord
 import os
 from search_results import find_google_results
+from db_operations import db_write_user_search,db_write_user_ping
 
 client = discord.Client()
 
 @client.event
 async def on_message(message):
-    print(f'{message.content} -> {message.author.id}|{message.author.name}')
     # we do not want the bot to reply to itself
     if message.author == client.user:
         return
 
+    print(f'{message.content} -> {message.author.id}|{message.author.name}')
     if message.content.lower() == 'hi':
-        msg = 'Hey !'
-        await message.channel.send(msg)
-        return
+        try:
+            db_write_user_ping(message.author.id)
+            msg = 'Hey !'
+            await message.channel.send(msg)
+            return
+        except:
+            raise Exception("Failed to reply back for Hi")
 
     if message.content.startswith('!google'):
         try:
-            print(f'Finding Seach Results for {message.content}'    )
-            search_results = find_google_results(message.content.replace('!google ',''))
+            print(f'Finding Seach Results for {message.content}')
+            search_query = message.content.replace('!google ','')
+            db_write_user_search(message.author.id,search_query)
+            search_results = find_google_results(search_query)
             await message.channel.send(search_results)
             return
         except:
