@@ -24,18 +24,16 @@ def db_write_user_search(user_id,search_string):
     except:
         raise Exception("Unable to Insert User Search History to DB!")
 
-def db_read_user_history(user_id,searc_like):
-    """ To write the USER Search History in DB"""
-    query = "SELECT * FROM search_history WHERE user_id = {} and search_string LIKE '%{}%';"
+def db_read_user_history(user_id,search_like):
+    """ To read the USER Search History in DB"""
+    query = "SELECT search_string FROM search_history where user_id = {} and ({})"
     try:
+        result_str = "Here are your recent related searches : \n\n"
         conn = DBStore.getInstance()
         cur = conn.cursor()
-        cur.execute(query.format(user_id,searc_like))
+        cur.execute(query.format(user_id,' OR '.join([f"LOWER(search_string) LIKE '%{y}%'" for y in search_like.lower().split()])))
         results = cur.fetchall()
-        
+        result_str = result_str + "\n".join([row[0].strip() for row in results])
+        return result_str
     except:
-        raise Exception("Unable to Insert User Search History to DB!")
-
-
-if __name__ == '__main__':
-    db_read_user_history()
+        raise Exception("Unable to Read User Search History to DB!")
