@@ -49,6 +49,5 @@ async def on_ready():
 if __name__ == '__main__':
     print('Fetching Discord Bot Token')
     TOKEN = os.environ.get('discordapp_TOKEN')
-    print(TOKEN)
     print('Conncting ...')
     client.run(TOKEN)
