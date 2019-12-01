@@ -17,6 +17,6 @@ class DBStore(object):
             user = os.environ.get('discordapp_db_user')
             password = os.environ.get('discordapp_db_password')
             port = os.environ.get('discordapp_db_port')
-            print(host,database,user,password,port)
+            #print(host,database,user,password,port)
             __instance = psycopg2.connect(host = host, database = database, user = user, password = password, port = port)
         return __instance
