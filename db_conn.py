@@ -1,4 +1,5 @@
 import psycopg2
+import os
 
 class DBStore(object):
     """For Communicating with DB"""
@@ -11,5 +12,11 @@ class DBStore(object):
     @staticmethod
     def getInstance():
         if DBStore.__instance == None:
-            __instance = psycopg2.connect(host = 'ec2-54-247-177-254.eu-west-1.compute.amazonaws.com', database = 'd273edihuvjs5m' , user = 'sykamvmspiswxh' , password = '455148df3dea0ba4194476a5ee9c91034a202d50a50f71ed8fd7d669dc2dd74e', port = '5432')
+            host = os.environ.get('discordapp_db_host')
+            database = os.environ.get('discordapp_db_database')
+            user = os.environ.get('discordapp_db_user')
+            password = os.environ.get('discordapp_db_password')
+            port = os.environ.get('discordapp_db_port')
+            print(host,database,user,password,port)
+            __instance = psycopg2.connect(host = host, database = database, user = user, password = password, port = port)
         return __instance
