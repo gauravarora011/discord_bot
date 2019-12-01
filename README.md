@@ -1,5 +1,5 @@
 # Discord_Bot
-Discord bot and implement some basic commands. Discord is a chat platform that's mostly used by the gaming community.
+Discord bot to implement some basic commands. Discord is a chat platform that's mostly used by the gaming community.
 
 # Link to Bot
 [https://discord.gg/XE2CvG](https://discord.gg/XE2CvG)
