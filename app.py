@@ -1,7 +1,7 @@
 import discord
 import os
 from search_results import find_google_results
-from db_operations import db_write_user_search,db_write_user_ping
+from db_operations import db_write_user_search,db_write_user_ping,db_read_user_history
 
 client = discord.Client()
 
@@ -23,7 +23,7 @@ async def on_message(message):
 
     if message.content.startswith('!google'):
         try:
-            print(f'Finding Seach Results for {message.content}')
+            print(f'Finding Seach Results from Google for {message.content}')
             search_query = message.content.replace('!google ','')
             db_write_user_search(message.author.id,search_query)
             search_results = find_google_results(search_query)
@@ -31,6 +31,16 @@ async def on_message(message):
             return
         except:
             await message.channel.send("Failed to fetch search results, contact admin!")
+
+    if message.content.startswith('!recent'):
+        try:
+            print(f'Traversting Search History for {message.author.id} | {message.content}')
+            search_query = message.content.replace('!recent ','')
+            search_results = db_read_user_history(message.author.id,search_query)
+            await message.channel.send(search_results)
+            return
+        except:
+            await message.channel.send("Failed to fetch results, contact admin!")
 
 @client.event
 async def on_ready():
